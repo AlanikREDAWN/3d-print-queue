@@ -10,6 +10,7 @@ const User = require('./models/User');
 const bcrypt = require('bcrypt');
 const fs = require('fs');
 const path = require('path');
+require('dotenv').config();
 const SECRET = process.env.JWT_SECRET || 'supersecret';
 
 // const { GridFsStorage } = require('multer-gridfs-storage');
