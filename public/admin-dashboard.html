@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Admin Dashboard</title>
+        <style>
+            body {
+                font-family: sans-serif;
+                padding: 20px;
+            }
+
+            .job {
+                border: 1px solid #ccc;
+                padding: 10px;
+                margin-bottom: 10px;
+            }
+
+            button {
+                margin-right: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>3D Print Queue - Admin</h1>
+        <div id="queue">Loading...</div>
+
+        <script>
+            const token = localStorage.getItem('adminToken');
+            if (!token) {
+                alert('Not logged in');
+                location.href = '/admin.html';
+            }
+
+            async function fetchQueue() {
+                const res = await fetch('/queue', {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                const jobs = await res.json();
+
+                const queueDiv = document.getElementById('queue');
+                queueDiv.innerHTML = '';
+
+                jobs.forEach(job => {
+                    const el = document.createElement('div');
+                    el.className = 'job';
+                    el.innerHTML = `
+                        <strong>${job.username}</strong> submitted <code>${job.fileName}</code><br>
+                        <small>Status: <b>${job.status}</b></small><br>
+                        <button onclick="updateStatus('${job._id}', 'done')">✔ Done</button>
+                        <button onclick="updateStatus('${job._id}', 'failed')">✖ Failed</button>
+                        <button onclick="deleteJob('${job._id}')">🗑 Delete</button>
+                    `;
+                    queueDiv.appendChild(el);
+                });
+            }
+
+            async function updateStatus(id, status) {
+                await fetch(`/job/${id}/status`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({ status })
+                });
+                fetchQueue();
+            }
+
+            async function deleteJob(id) {
+                await fetch(`/job/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                fetchQueue();
+            }
+
+            fetchQueue();
+        </script>
+    </body>
+</html>

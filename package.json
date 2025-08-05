@@ -2,9 +2,10 @@
   "name": "3d-print-queue",
   "version": "1.0.0",
   "description": "",
-  "main": "script.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -18,8 +19,15 @@
   },
   "homepage": "https://github.com/AlanikREDAWN/3d-print-queue#readme",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
     "express": "^5.1.0",
-    "mongoose": "^8.16.4"
+    "gridfs-stream": "^1.1.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.16.4",
+    "multer": "1.4.4",
+    "multer-gridfs-storage": "^5.0.2",
+    "three": "^0.179.1"
   }
 }
